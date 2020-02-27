@@ -12,6 +12,6 @@ where `/path/to/data` is the data directory on your local machine. Your data wil
 Once inside the container, do `ls /data` to ensure your data is there, followed by
 ```
 ImageJ-linux64 --ij2 --headless --run imagej_basic_ashlar.py \
-  "filename='data/input.ome.tiff',output_dir='/data/',experiment_name='my_experiment'"
+  "filename='/data/input.ome.tiff',output_dir='/data/',experiment_name='my_experiment'"
 ```
 for each `input.ome.tiff` in your data directory.
