@@ -14,11 +14,12 @@
 # ImageJ --ij2 --headless --run imagej_basic_ashlar.py "filename='input.ext',output_dir='output',experiment_name='my_experiment'"
 
 import sys
-from ij import IJ, WindowManager
+from ij import IJ, WindowManager, Prefs
 from ij.macro import Interpreter
 from loci.plugins import BF
 from loci.plugins.in import ImporterOptions
 from loci.formats import ImageReader
+from loci.formats.in import DynamicMetadataOptions
 import BaSiC_ as Basic
 
 import pdb
@@ -36,11 +37,24 @@ def main():
 
     print "Loading images..."
 
+    # For multi-scene .CZI files, we need raw tiles instead of the
+    # auto-stitched mosaic and we don't want labels or overview images.  This
+    # only affects BF.openImagePlus, not direct use of the BioFormats reader
+    # classes which we also do (see below)
+    Prefs.set("bioformats.zeissczi.allow.autostitch",  "false")
+    Prefs.set("bioformats.zeissczi.include.attachments", "false")
+
     # Use BioFormats reader directly to determine dataset dimensions without
     # reading every single image. The series count (num_images) is the one value
     # we can't easily get any other way, but we might as well grab the others
     # while we have the reader available.
+    dyn_options = DynamicMetadataOptions()
+    # Directly calling a BioFormats reader will not use the IJ Prefs settings
+    # so we need to pass these options explicitly.
+    dyn_options.setBoolean("zeissczi.autostitch", False)
+    dyn_options.setBoolean("zeissczi.attachments", False)
     bfreader = ImageReader()
+    bfreader.setMetadataOptions(dyn_options)
     bfreader.id = str(filename)
     num_images = bfreader.seriesCount
     num_channels = bfreader.sizeC
