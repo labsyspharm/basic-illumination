@@ -15,3 +15,5 @@ ImageJ-linux64 --ij2 --headless --run imagej_basic_ashlar.py \
   "filename='/data/input.ome.tiff',output_dir='/data/',experiment_name='my_experiment'"
 ```
 for each `input.ome.tiff` in your data directory.
+
+(Note that the trailing `\` on the first line is necessary to break the command up across multiple lines. When writing the command on a single line, the `\` should be removed to avoid parse errors.)
