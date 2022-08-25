@@ -1,5 +1,7 @@
 FROM fiji/fiji:fiji-openjdk-8
 
+ENTRYPOINT []
+
 RUN wget https://www.helmholtz-muenchen.de/fileadmin/ICB/software/BaSiC/BaSiCPlugin.zip && \
     unzip BaSiCPlugin.zip && \
     mv BaSiCPlugin/BaSiC_.jar Fiji.app/plugins/ && \
