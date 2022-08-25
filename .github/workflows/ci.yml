@@ -15,7 +15,7 @@ jobs:
         id: cache-data
         with:
           path: |
-            ~/data/exemplar-001-cycle6.ome.tif
+            ~/data/exemplar-001-cycle-06.ome.tiff
           key: testdata-2022-08-25
 
       # Download test data only if no cache is present
