@@ -28,6 +28,28 @@ from ij.macro import Interpreter
 import BaSiC_ as Basic
 
 
+def format_to_regex(s):
+    # Translate a restricted subset of the "format" pattern language to
+    # a matching regex with named capture. Also convert glob patterns
+    # (* and ?) to the corresponding regex patterns.
+    s = s.replace('.', '\.')
+    s = s.replace('(', '\(')
+    s = s.replace(')', '\)')
+    s = s.replace('*', '.*')
+    s = s.replace('?', '.')
+    regex = re.sub(r'{([^:}]+):?([^}]*)}', f2r_repl, s)
+    return regex
+
+def f2r_repl(m):
+    r = '(?P<' + m.group(1) + '>.'
+    if re.match(r'^\d+$', m.group(2)):
+        r += '{' + m.group(2) + '}'
+    else:
+        r += '*?'
+    r += ')'
+    return r
+
+
 def enumerate_filenames(pattern):
     """Return filenames matching pattern (a glob pattern containing an optional
     {channel} placeholder).
@@ -37,8 +59,7 @@ def enumerate_filenames(pattern):
 
     """
     (base, pattern) = os.path.split(pattern)
-    regex = re.sub(r'{([^:}]+)(?:[^}]*)}', r'(?P<\1>.*?)',
-                   pattern.replace('.', '\.').replace('*', '.*?'))
+    regex = format_to_regex(pattern)
     channels = set()
     num_images = 0
     # Dict[Union[int, str, None], List[str]]
