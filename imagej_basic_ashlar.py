@@ -88,11 +88,16 @@ def main():
         # concatenate=True gives us a single stack rather than a list of
         # separate images.
         options.setConcatenate(True)
-        # Limit the reader to the channel we're currently working on. This loop
-        # is mainly why we need to know num_images before opening anything.
+        # Limit the reader to the channel we're currently working on, Z=0, and
+        # T=0. This loop is mainly why we need to know num_images before opening
+        # anything.
         for i in range(num_images):
             options.setCBegin(i, channel)
             options.setCEnd(i, channel)
+            options.setZBegin(i, 0)
+            options.setZEnd(i, 0)
+            options.setTBegin(i, 0)
+            options.setTEnd(i, 0)
         # openImagePlus returns a list of images, but we expect just one (a
         # stack).
         input_image = BF.openImagePlus(options)[0]
