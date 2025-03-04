@@ -9,4 +9,7 @@ RUN wget https://github.com/marrlab/BaSiC/raw/b6943502853c052fd93c6fabc807bc4090
     rm -r BaSiCPlugin.zip BaSiCPlugin __MACOSX && \
     rm Fiji.app/jars/jtransforms-2.4.jar
 
+# Update Fiji ourselves as the dockerhub images are years out of date.
+RUN ./entrypoint.sh --update update
+
 COPY *.py ./
